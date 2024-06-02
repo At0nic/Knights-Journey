@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
+  <Title>Knight's Journey</Title>
+</head>
+<body>
+  <!-- horní lišta s názvem -->
+  <header class="header">
+    <img src="KnightShield.png" width="2%">
+    <h1>Knight's Journey</h1>
+  </header>
+
+  <!-- všechno pod headerem -->
+  <div class="container">
+    <button id="Start" onclick="gameLoop()">Start</button>
+
+    <!-- skóre -->
+    <h1 id="player1Score">0</h1>
+    <h1 id="player2Score">0</h1>
+
+    <img src="Torch.gif">
+
+    <!-- hrací pole a všecho v tom -->
+    <div class="content">
+      <canvas id="playingField">
+      </canvas>
+        <div class="player1">
+          <img id="player1" src="Knight.png">
+            </div>
+        </div> 
+      <img src="Torch.gif">
+  </div>
+  <!-- logic script hry -->
+  <script src="logic.js"></script>
+</body>
+</html>

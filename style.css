@@ -1,0 +1,73 @@
+@font-face {
+    font-family: KnightFont;
+    src: url(Knight.ttf);
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+/*Styling headeru*/
+.header{
+    background-image: url("Cobblestone_pat.jpg");
+    box-shadow: 0 4px 2px -2px gray;
+}
+.header img{
+    padding: 0.25%;
+    vertical-align: middle;
+    filter: drop-shadow(2px 1px);
+}
+.header h1{
+    margin: 0;
+    display: inline-block;
+    font-family: KnightFont, sans-serif;
+    letter-spacing: 2px;
+    font-size: 250%;
+    vertical-align: middle;
+    text-shadow: 2px 2px white;
+}
+
+/*Styling body*/
+body{
+    height: 100vh;
+    background-image: url("Cobblestone_floor.jpg");
+    }
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 94%;
+}
+#Start{
+    font-family: sans-serif;
+    position: absolute;
+    bottom: 100px;
+}
+.container h1{
+    color: #fff;
+    font-family: sans-serif;
+    font-size: 4rem;
+    position: absolute;
+    bottom: 100px;
+}
+#player1Score{
+    left: 35%;
+}
+#player2Score{
+    right: 35%;
+}
+.content{
+    background-image: url("Cobblestone_floor_dark.jpg");
+    width: 80%;
+    height: 80%;
+}
+.container img{
+    height: 10%;
+    }
+#playingField{
+    width: 100%;
+    height: 100%;
+}
+.player1{
+    height: 0;
+    width: 0;
+}
