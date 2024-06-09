@@ -2,6 +2,10 @@
     font-family: KnightFont;
     src: url(Knight.ttf);
 }
+@font-face {
+    font-family: BlackKnightFont;
+    src: url(BlackKnight.ttf);
+}
 *{
     margin: 0;
     padding: 0;
@@ -35,25 +39,68 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 94%;
+    height: 93%;
 }
-#Start{
-    font-family: sans-serif;
+#VSBot{
+    background: none;
+    padding: 0;
+    width: 64px;
+    height: 32px;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+#VSBot img{
+    width: 60px;
+    height: 28px;
+    margin: 0 auto;
+}
+#VS1{
+    background: none;
+    padding: 0;
+    width: 64px;
+    height: 32px;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+#VS1 img{
+    width: 60px;
+    height: 28px;
+    margin: 0 auto;
+}
+
+.shieldContainer{
+    display: flex;
     position: absolute;
     bottom: 100px;
+    width: 40%;
+    flex-Direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
 }
-.container h1{
+.group{
+    position: relative;
+}
+.shieldContainer #left{
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+}
+.shieldContainer #right{
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+}
+.shieldContainer h1{
+    padding-left: 28%;
+    display: inline-block;
     color: #fff;
-    font-family: sans-serif;
-    font-size: 4rem;
+    font-family: BlackKnightFont;
+    font-size: 3rem;
     position: absolute;
-    bottom: 100px;
-}
-#player1Score{
-    left: 35%;
-}
-#player2Score{
-    right: 35%;
+    
 }
 .content{
     background-image: url("Cobblestone_floor_dark.jpg");

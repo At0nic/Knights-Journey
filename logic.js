@@ -20,6 +20,7 @@ function vec2(x, y){
     return{x: x, y: y};
 }
 //míČ
+let ballDefaultVelocity = 14;
 function Ball(position, velocity, radius){
     this.position = position;
     this.velocity = velocity;
@@ -39,7 +40,7 @@ function Ball(position, velocity, radius){
     };
 }
 //Hráče/bot
-function Player(position, velocity, width, height){
+function Player(position, velocity, width, height, keyupward, keydownward){
     this.position = position;
     this.velocity = velocity;
     this.width = width;
@@ -48,10 +49,10 @@ function Player(position, velocity, width, height){
     
 
     this.update = function() {
-        if(keysPressed[keyUp]){
+        if(keysPressed[keyupward]){
             this.position.y -= this.velocity.y;
         }
-        if(keysPressed[keyDown]){
+        if(keysPressed[keydownward]){
             this.position.y += this.velocity.y;
         }
     };
@@ -72,7 +73,7 @@ function Player(position, velocity, width, height){
     }
 }
 //Kolize hráče/bota s okrajema
-function playerCollisionWithEdge(){
+function playerCollisionWithEdge(player){
     if(player.position.y <= 0){
             player.position.y = 0;
     }
@@ -84,19 +85,56 @@ function playerCollisionWithEdge(){
 //Kolize míČe s okrajema
 function ballCollisionWithEdges(){
     if (ball.position.y + ball.radius >= canvas.height){
-        ball.velocity.y *= -1
+        ball.velocity.y *= -1.0001
     }
     if (ball.position.y - ball.radius <= 0){
-        ball.velocity.y *= -1
+        ball.velocity.y *= -1.0001
     }
 }
 //Kolize hráče/bota s míčem
 function playerCollisionWithBall(ball, player){
-    let dx = Math.abs(ball.position.x - player.getCenter().x);
+    let dx = Math.abs(ball.position.x - player.getCenter().x); //hodnota obou postredku
     let dy = Math.abs(ball.position.y - player.getCenter().y);
+    let ballOrientation = Math.sign(ball.velocity.x);
 
     if(dx <= (ball.radius + player.getHalfWidth()) && dy <= (ball.radius + player.getHalfHeight())){
-        ball.velocity.x *= -1
+        if((ballOrientation == -1 && keysPressed["w"]) || (Math.sign(ball.velocity.x) == -1 && keysPressed["s"]) ){
+            ball.velocity.x = ballOrientation * ballDefaultVelocity;
+            ball.velocity.x *= -1.1;
+        }
+        else{
+            ball.velocity.x = ballOrientation * ballDefaultVelocity;
+            ball.velocity.x *= -1;
+        }
+        if (ballOrientation == 1){
+            ball.position.x += 70;
+        }
+        else{
+            ball.position.x -= 70;
+        }
+    }
+}
+//Kolize 2.hráče s míčem
+function playerCollisionWithBall2P(ball, player){
+    let dx = Math.abs(ball.position.x - player.getCenter().x); //hodnota obou postredku
+    let dy = Math.abs(ball.position.y - player.getCenter().y);
+    let ballOrientation = Math.sign(ball.velocity.x);
+
+    if(dx <= (ball.radius + player.getHalfWidth()) && dy <= (ball.radius + player.getHalfHeight())){
+        if((ballOrientation == 1 && keysPressed["ArrowUp"]) || (Math.sign(ball.velocity.x) == 1 && keysPressed["ArrowDown"]) ){
+            ball.velocity.x = ballOrientation * ballDefaultVelocity;
+            ball.velocity.x *= -1.1;
+        }
+        else{
+            ball.velocity.x = ballOrientation * ballDefaultVelocity;
+            ball.velocity.x *= -1;
+        }
+        if (ballOrientation == 1){
+            ball.position.x += 70;
+        }
+        else{
+            ball.position.x -= 70;
+        }
     }
 }
 //Ai druhého hráče
@@ -120,14 +158,16 @@ function Ai(ball, player){
 }
 //Spawnování míče
 function respawnBall(ball){
+    let ballOrientation = Math.sign(ball.velocity.x);
+    ball.velocity.x = ballOrientation * ballDefaultVelocity;
     if (ball.velocity.x > 0){
         ball.position.x = canvas.width - 150;
-        ball.position.y = (Math.random() * (canvas.height - 200)) + 100;
+        ball.position.y = (Math.random() * (canvas.height - 300)) + 100;
     }
 
     if(ball.velocity.x < 0){
         ball.position.x = 150;
-        ball.position.y = (Math.random() * (canvas.height - 200)) + 100;
+        ball.position.y = (Math.random() * (canvas.height - 300)) + 100; //(Math.random() * (canvas.height - 200)) + 100
     }
 
     ball.velocity.x *= -1;
@@ -148,9 +188,10 @@ function increaseScore(ball, player, bot){
 }
 
 //Vytvoření entit
-const ball = new Ball(vec2(200, 200,), vec2(13, 13), 20);
-const player = new Player(vec2(0, 50), vec2(15, 15), 100, 100);
-const bot = new Player(vec2(canvas.width - 100, 30), vec2(11, 11), 100, 100);
+const ball = new Ball(vec2(200, 200,), vec2(ballDefaultVelocity, ballDefaultVelocity), 20);
+const player = new Player(vec2(0, canvas.height/2), vec2(15, 15), 100, 100, "w", "s");
+const player2 = new Player(vec2(canvas.width - 100, canvas.height/2), vec2(15, 15), 100, 100, "ArrowUp", "ArrowDown");
+const bot = new Player(vec2(canvas.width - 100, canvas.height/2), vec2(ballDefaultVelocity - 1, ballDefaultVelocity - 1), 100, 100, "u", "p");
 
 //Aktivní dění ve hře
 function gameUpdate(){
@@ -164,14 +205,12 @@ function gameUpdate(){
 
     increaseScore(ball, player, bot)
 }
-
 //"Kreslení" vśech objektů
 function gameDraw(){
     ball.draw();
     player.draw();
     bot.draw();
 }
-
 //Cycklus aby hra furt běžela
 function gameLoop(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -179,4 +218,30 @@ function gameLoop(){
 
     gameUpdate();
     gameDraw();
+}
+
+//Stejne veci akorat pro 2 lidske hrace
+function gameDraw2P(){
+    ball.draw();
+    player.draw();
+    player2.draw();
+}
+function gameUpdate2P(){
+    ball.update();
+    player.update();
+    player2.update();
+    playerCollisionWithEdge(player)
+    playerCollisionWithEdge(player2)
+    ballCollisionWithEdges(ball);
+    playerCollisionWithBall(ball, player)
+    playerCollisionWithBall2P(ball, player2)
+
+    increaseScore(ball, player, player2)
+}
+function gameLoop2P(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    window.requestAnimationFrame(gameLoop2P);
+
+    gameUpdate2P();
+    gameDraw2P();
 }

@@ -14,11 +14,22 @@
 
   <!-- všechno pod headerem -->
   <div class="container">
-    <button id="Start" onclick="gameLoop()">Start</button>
 
     <!-- skóre -->
-    <h1 id="player1Score">0</h1>
-    <h1 id="player2Score">0</h1>
+    <div class="shieldContainer">
+      <div class="group">
+        <h1 id="player1Score">0</h1>
+      <img id="left" src="Left Side.png">
+      </div>
+      <div class="group">
+      <button id="VSBot" onclick="gameLoop()"><img src="VSBot.png"></button>
+      <button id="VS1" onclick="gameLoop2P()"><img src="1VS1.png"></button>
+    </div>
+      <div class="group">
+        <h1 id="player2Score">0</h1>
+        <img id="right" src="Right Side.png">
+      </div>
+    </div>
 
     <img src="Torch.gif">
 
